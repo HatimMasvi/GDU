@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+    <style>
+        #loader {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload Files to Google Drive</h1>
+    <input type="file" id="fileInput" multiple />
+    <button id="uploadButton">Upload</button>
+    <div id="loader">Uploading...</div>
+    <div id="message"></div>
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', () => {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+            if (files.length === 0) {
+                alert('Please choose a file to upload.');
+                return;
+            }
+
+            const formData = new FormData();
+            for (const file of files) {
+                formData.append('files', file);
+            }
+
+            document.getElementById('loader').style.display = 'block';
+
+            fetch('https://your-github-pages-url/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('message').innerText = data.message;
+                fileInput.value = '';
+            })
+            .catch(error => {
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('message').innerText = 'Failed to upload files: ' + error.message;
+            });
+        });
+    </script>
+</body>
+</html>
