@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>File Upload</title>
+    <title>File Upload to Google Drive</title>
     <style>
         #loader {
             display: none;
@@ -32,7 +32,7 @@
 
             document.getElementById('loader').style.display = 'block';
 
-            fetch('https://your-github-pages-url/upload', {
+            fetch('/upload', {
                 method: 'POST',
                 body: formData
             })
