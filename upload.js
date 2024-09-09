@@ -1,13 +1,11 @@
 const { google } = require('googleapis');
-const fs = require('fs');
-const path = require('path');
 const express = require('express');
 const multer = require('multer');
 const app = express();
 const port = 3000;
 
-const OAuth2 = google.auth.OAuth2;
-const oauth2Client = new OAuth2(
+// OAuth2 setup with Google Drive API credentials
+const oauth2Client = new google.auth.OAuth2(
   process.env.CLIENT_ID,
   process.env.CLIENT_SECRET,
   'https://developers.google.com/oauthplayground'
@@ -22,11 +20,13 @@ const drive = google.drive({ version: 'v3', auth: oauth2Client });
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// Handle the file upload POST request
 app.post('/upload', upload.array('files'), async (req, res) => {
   try {
     const folderId = process.env.FOLDER_ID;
     const files = req.files;
 
+    // Upload each file to Google Drive
     for (const file of files) {
       await drive.files.create({
         requestBody: {
